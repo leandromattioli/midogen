@@ -1,0 +1,2 @@
+# midogen
+Minimalist Documentation Generator
