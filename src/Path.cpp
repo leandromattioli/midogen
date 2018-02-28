@@ -20,14 +20,33 @@
  * \date Feb 27, 2018
  */
 
+#include <sys/stat.h>
+#include <string>
 #include "Path.h"
 
-Path::Path() {
+bool Path::isFile(std::string path) {
+	struct stat s;
+	if( stat(path.c_str(), &s) == 0 )
+		return s.st_mode & S_IFREG;
+	return false;
 }
 
-Path::Path(const Path& orig) {
-}
+bool Path::isDir(std::string path) {
+    std::string pathcopy;
+    struct stat s;
+    int result;
+    int last;
 
-Path::~Path() {
-}
+    //Removing trailing PATHSEP, if existent
+    pathcopy = path;
+    last = pathcopy.length() - 1;
+    if (pathcopy[last] == '/')
+        pathcopy[last] = '\0';
 
+    //Checking for dir existence
+    result = stat(pathcopy.c_str(), &s);
+
+    if (result == 0)
+        return s.st_mode & S_IFDIR;
+    return false;
+}

@@ -23,13 +23,13 @@
 #ifndef PATH_H
 #define PATH_H
 
+#include <string>
+
 class Path {
 public:
-    Path();
-    Path(const Path& orig);
-    virtual ~Path();
-private:
-
+    static bool isDir(std::string path);
+    static bool isFile(std::string path);
+    
 };
 
 #endif /* PATH_H */

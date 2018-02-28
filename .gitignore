@@ -1,2 +1,5 @@
 nbproject/
 *.exe
+# automatically generated
+test/TestPath.cpp 
+

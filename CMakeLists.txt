@@ -6,6 +6,10 @@ set (CMAKE_CXX_STANDARD 11)
 # Header files location
 include_directories("src")
 
+# Template Rendering
+configure_file(${PROJECT_SOURCE_DIR}/test/TestPath.cpp.in
+               ${PROJECT_SOURCE_DIR}/test/TestPath.cpp)
+
 # Main library: all classes implementations
 file(GLOB CLASSES src/*.cpp)
 list(REMOVE_ITEM CLASSES src/midogen.cpp)
