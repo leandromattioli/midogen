@@ -37,25 +37,51 @@ bool String::endswith(const string& suffix) {
             && equal(suffix.rbegin(), suffix.rend(), this->rbegin());
 }
 
-String String::trim(const string& chars) {
-
+String String::strip(const string& chars) {
+    return this->lstrip(chars).rstrip(chars);
 }
 
-String String::ltrim(const string& chars) {
-    String s(*this);
+String String::lstrip(const string& chars) {
+    int pos;
+    for (pos = 0; pos < this->length(); pos++) {
+        bool isSpace = false;
+        for (const char& c : chars) {
+            if (this->at(pos) == c) {
+                isSpace = true;
+                break;
+            }
+        }
+        if (!isSpace)
+            break;
+    }
+    String result;
+    result.assign(this->substr(pos));
+    return result;
 }
 
-String String::rtrim(const string& chars) {
-    //String s(*this);
-    //s.erase(s.find_last_not_of(t) + 1);
-    //return s;
+String String::rstrip(const string& chars) {
+    int pos;
+    for (pos = this->length() - 1; pos >= 0; pos--) {
+        bool isSpace = false;
+        for (const char& c : chars) {
+            if (this->at(pos) == c) {
+                isSpace = true;
+                break;
+            }
+        }
+        if (!isSpace)
+            break;
+    }
+    String result;
+    result.assign(this->substr(0, pos + 1));
+    return result;
 }
 
 String String::replace(const string& oldValue, const string& newValue) {
     String copyString;
     copyString.assign(*this);
     size_t pos = this->find(oldValue);
-    if(pos != string::npos) {
+    if (pos != string::npos) {
         copyString.replace(pos, oldValue.length(), newValue);
     }
     return copyString;

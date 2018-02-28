@@ -32,9 +32,9 @@ public:
     bool startswith(const std::string& prefix);
     bool endswith(const std::string& suffix);
     String replace(const std::string& oldValue, const std::string& newValue);
-    String ltrim(const std::string& chars);
-    String rtrim(const std::string& chars);
-    String trim(const std::string& chars);
+    String lstrip(const std::string& chars);
+    String rstrip(const std::string& chars);
+    String strip(const std::string& chars);
     /*String(const String& orig);
     virtual ~String();*/
 };

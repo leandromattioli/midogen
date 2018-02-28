@@ -18,7 +18,7 @@
 #include <String.h>
 
 
-TEST_CASE("prefix and suffix tests", "[String::startswith,String::endswith]") {
+TEST_CASE("prefix and suffix tests", "[String startswith,endswith]") {
     String testString("abcde");
 
     REQUIRE(testString.startswith("abc"));
@@ -33,13 +33,37 @@ TEST_CASE("replace tests", "[String::replace]") {
 
     SECTION("substring found and replaced and original not changed") {
         String result = testString.replace("going", "leaving");
-        REQUIRE(result.compare("I'm leaving to Mars") == 0); //replaced
-        REQUIRE(testString.compare("I'm going to Mars") == 0);
+        REQUIRE(result == "I'm leaving to Mars"); //replaced
+        REQUIRE(testString == "I'm going to Mars");
     }
     
     SECTION("substring not found") {
         String result = testString.replace("nonsense", "ghost");
-        REQUIRE(result.compare("I'm going to Mars") == 0); //not found
+        REQUIRE(result == "I'm going to Mars"); //not found
     }
+}
 
+TEST_CASE("stripping (trimming)", "[String strip,lstrip,rstrip") {
+    String testString("  -- Title --  ");
+    
+    SECTION("left strip") {
+        REQUIRE(testString.lstrip(" ") == "-- Title --  ");
+        REQUIRE(testString.lstrip(" -") == "Title --  ");
+        REQUIRE(testString.lstrip(" -a") == "Title --  ");
+        REQUIRE(testString.lstrip("!") == testString);
+    }
+    
+    SECTION("right strip") {
+        REQUIRE(testString.rstrip(" ") == "  -- Title --");
+        REQUIRE(testString.rstrip(" -") == "  -- Title");
+        REQUIRE(testString.rstrip(" -a") == "  -- Title");
+        REQUIRE(testString.rstrip("!") == testString);
+    }
+    
+    SECTION("strip") {
+        REQUIRE(testString.strip(" ") == "-- Title --");
+        REQUIRE(testString.strip(" -") == "Title");
+        REQUIRE(testString.strip(" -a") == "Title");
+        REQUIRE(testString.strip("!") == testString);
+    }
 }
