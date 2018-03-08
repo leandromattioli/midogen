@@ -22,7 +22,6 @@
 
 #include <cstdlib>
 #include <iostream>
-#include <String.h>
 #include <Generator.h>
 #include <boost/program_options.hpp>
 
@@ -123,8 +122,6 @@ int main(int argc, char** argv) {
     po::store(po::command_line_parser(argc, argv).
             options(all_options).positional(pos).run(), varmap);
     po::notify(varmap);
-    
-    cout << varmap.count("file") << endl;
 
     //Help
     if (varmap.count("help")) {

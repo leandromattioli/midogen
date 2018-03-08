@@ -39,7 +39,7 @@ private:
 public:
     Generator();
     const string getMarkerByFilename(const string& filename);
-    void process(const istream& in = cin, const ostream& out = cout, 
+    void process(istream& in = cin, ostream& out = cout, 
                  const string& marker = "///");
     int process(const string& fileIn, const string& fileOut = "", 
                  const string& marker = "");
