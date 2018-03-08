@@ -21,13 +21,100 @@
  */
 
 #include "Generator.h"
+#include <string>
+#include <iostream>
+#include <fstream>
+#include <map>
+#include <boost/filesystem.hpp>
+
+namespace fs = boost::filesystem;
+using std::__cxx11::string;
+using std::istream;
+using std::ostream;
+using std::ifstream;
+using std::ofstream;
+using std::cin;
+using std::cout;
+using std::cerr;
+using std::endl;
+using std::map;
 
 Generator::Generator() {
+    const char* markersTable[][2] = {
+        {"h", "///"},
+        {"c", "///"},
+        {"hpp", "///"},
+        {"cpp", "///"},
+        {"cc", "///"},
+        {"cs", "///"},
+        {"java", "///"},
+        {"d", "///"},
+        {"py", "##"},
+        {"sh", "##"},
+        {"lsp", ";;;"},
+        {"lisp", ";;;"},
+        {0, 0}
+    };
+    int i = 0;
+    while(true) {
+        if(!markersTable[i][0])
+            break;
+        const string extension = markersTable[i][0];
+        const string marker = markersTable[i][1];
+        markersByExtension.insert(std::make_pair(extension, marker));
+    }
 }
 
-Generator::Generator(const Generator& orig) {
+const string Generator::getMarkerByFilename(const string& filename) {
+    string extension = fs::extension(filename);
+    if(markersByExtension.count(extension))
+        return markersByExtension[extension];
+    return "///"; //fallback
 }
 
-Generator::~Generator() {
+void Generator::process(const istream& in, const ostream& out, 
+        const string& marker) {
+    
+
 }
+
+int Generator::process(const string& fileIn, const string& fileOut, 
+                        const string& marker) {
+    //Defining marker
+    string finalMarker;
+    if(marker.empty())
+        finalMarker = getMarkerByFilename(fileIn);
+    else
+        finalMarker = marker;
+    
+    //Creating streams
+    const istream& in = ifstream(fileIn);
+    if(!in) {
+        cerr << "error: cannot open file " << fileIn << endl;
+        return 2;
+    }
+    
+    ofstream outf;
+    if(!fileOut.empty()) {
+        outf = ofstream(fileOut);
+        if(!outf) {
+            cerr << "error: cannot create output file " << fileOut << endl;
+            return 2;
+        }
+    }
+    const ostream& out = fileOut.empty() ? cout: outf;
+    
+    //Extracting documentation
+    process(in, out, finalMarker);
+    return 0;
+}
+
+int Generator::processDir(const string& dirIn, const string& dirOut, 
+                           const string& extension, const string& marker) {
+    // list dir
+    // get marker
+    // call process(fileIn, fileOut, marker)
+    return 0;
+}
+
 

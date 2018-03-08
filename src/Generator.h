@@ -23,13 +23,28 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 
+#include <map>
+#include <string>
+#include <iostream>
+
+using std::istream;
+using std::ostream;
+using std::__cxx11::string;
+using std::cin;
+using std::cout;
+
 class Generator {
+private:
+    std::map<const std::string, const std::string> markersByExtension;
 public:
     Generator();
-    Generator(const Generator& orig);
-    virtual ~Generator();
-private:
-
+    const string getMarkerByFilename(const string& filename);
+    void process(const istream& in = cin, const ostream& out = cout, 
+                 const string& marker = "///");
+    int process(const string& fileIn, const string& fileOut = "", 
+                 const string& marker = "");
+    int processDir(const string& dirIn, const string& dirOut = "", 
+                    const string& extension = ".txt", const string& marker= "");
 };
 
 #endif /* GENERATOR_H */
