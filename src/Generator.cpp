@@ -161,7 +161,7 @@ int Generator::processDir(const fs::path& dirIn, const fs::path& dirOut,
      * Possible solutions: any_iterator 
      * <http://thbecker.net/free_software_utilities/type_erasure_for_cpp_iterators/start_page.html>
      */
-    
+ 
     
     int result = 0; 
     std::vector<fs::directory_entry> entries;
