@@ -4,16 +4,12 @@ project (midogen)
 set (CMAKE_CXX_STANDARD 11)
 
 # Vendor libraries
-# set(Boost_USE_STATIC_LIBS ON)
+set(Boost_USE_STATIC_LIBS ON)
 find_package(Boost REQUIRED COMPONENTS system program_options filesystem)
 
 # Header files location
 include_directories("src")
 include_directories(${Boost_INCLUDE_DIRS})
-
-# Template Rendering
-configure_file(${PROJECT_SOURCE_DIR}/test/TestPath.cpp.in
-               ${PROJECT_SOURCE_DIR}/test/TestPath.cpp)
 
 # Main library: all classes implementations
 file(GLOB CLASSES src/*.cpp)

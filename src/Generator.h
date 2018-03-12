@@ -26,12 +26,14 @@
 #include <map>
 #include <string>
 #include <iostream>
+#include <boost/filesystem.hpp>
 
 using std::istream;
 using std::ostream;
 using std::__cxx11::string;
 using std::cin;
 using std::cout;
+namespace fs = boost::filesystem;
 
 class Generator {
 private:
@@ -43,8 +45,9 @@ public:
                  const string& marker = "///");
     int process(const string& fileIn, const string& fileOut = "", 
                  const string& marker = "");
-    int processDir(const string& dirIn, const string& dirOut = "", 
-                    const string& extension = ".txt", const string& marker= "");
+    int processDir(const fs::path& dirIn, const fs::path& dirOut = "", 
+                    const string& extension = ".txt", 
+                    const string& marker= "", const bool recursive = false);
 };
 
 #endif /* GENERATOR_H */

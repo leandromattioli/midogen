@@ -81,8 +81,10 @@ int processDir(po::variables_map& varmap) {
     string dirIn = varmap["in-dir"].as<string>();
     string dirOut = varmap["out-dir"].as<string>();
     string extension = varmap["extension"].as<string>();
+    bool recursive = varmap.count("recursive") > 0;
     Generator generator;
-    generator.processDir(dirIn, dirOut, extension, getMarker(varmap));
+    generator.processDir(dirIn, dirOut, extension, getMarker(varmap), 
+            recursive);
 }
 
 int main(int argc, char** argv) {
@@ -107,6 +109,7 @@ int main(int argc, char** argv) {
                 "directory to output documentation (required)")
             ("extension,e", po::value<string>(), 
                 "output files extension (required)")
+            ("recursive,r", "recurse into subdirectories")
             ;
 
     po::options_description all_options("All Options");
