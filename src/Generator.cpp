@@ -24,8 +24,10 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <iterator>
 #include <map>
 #include <boost/filesystem.hpp>
+#include <boost/iterator.hpp>
 #include <boost/algorithm/string.hpp>
 
 namespace fs = boost::filesystem;
@@ -39,6 +41,8 @@ using std::cout;
 using std::cerr;
 using std::endl;
 using std::map;
+
+///TEST
 
 Generator::Generator() {
     const char* markersTable[][2] = {
@@ -56,7 +60,7 @@ Generator::Generator() {
         {"lisp", ";;;"},
         {0, 0}
     };
-    for(int i = 0; markersTable[i][0]; i++) {
+    for (int i = 0; markersTable[i][0]; i++) {
         const string extension = markersTable[i][0];
         const string marker = markersTable[i][1];
         markersByExtension.insert(std::make_pair(extension, marker));
@@ -118,12 +122,68 @@ int Generator::process(const string& fileIn, const string& fileOut,
     return 0;
 }
 
-int Generator::processDir(const string& dirIn, const string& dirOut,
-        const string& extension, const string& marker) {
-    // list dir
-    // get marker
-    // call process(fileIn, fileOut, marker)
-    return 0;
+int Generator::processDir(const fs::path& dirIn, const fs::path& dirOut,
+        const string& extension, const string& marker,
+        const bool recursive) {
+    
+    //Extension with dot
+    string dotExtension = extension;
+    dotExtension.insert(0, 1, '.');
+    
+    //Normalized paths
+    fs::path normDirIn = dirIn;
+    fs::path normDirOut = dirOut;
+    normDirIn.remove_trailing_separator();
+    normDirOut.remove_trailing_separator();
+   
+    
+    //Invalid input dir
+    if (!fs::is_directory(dirIn)) {
+        cerr << "error: cannot access input directory " << dirIn << endl;
+        return 2;
+    }
+    
+    //Cannot create output dir
+    if (!fs::is_directory(dirOut)) {
+        if (!fs::create_directories(dirOut)) {
+            cerr << "error: cannot create output directory " << dirOut << endl;
+            return 2;
+        }
+    }
+    
+    //Normal flow
+    
+    /* @FIXME
+     * Cannnot declare a single iterator type that and assign
+     * either recursive_directory_iterator or directory_iterator,
+     * depending on a condition.
+     * Workaround: add a vector to hold the iterator entries...
+     * Possible solutions: any_iterator 
+     * <http://thbecker.net/free_software_utilities/type_erasure_for_cpp_iterators/start_page.html>
+     */
+    
+    
+    int result = 0; 
+    std::vector<fs::directory_entry> entries;
+    if(recursive) {
+        for(auto e : fs::recursive_directory_iterator(dirIn))
+            entries.push_back(e);
+    }
+    else {
+        for(auto e : fs::directory_iterator(dirIn))
+            entries.push_back(e);
+    }
+                          
+    for (auto & fileIn : entries) {
+        if (!fs::is_regular_file(fileIn))
+            continue;
+        //Constructing path to out file.
+        string fileOut = fileIn.path().string() + dotExtension;
+        boost::replace_first(fileOut, normDirIn.string(), normDirOut.string());
+        cout << "Processing " << fileIn << "(creating " << fileOut << ")..." << endl;
+        process(fileIn.path().string(), fileOut, marker);
+    }
+    return result;
 }
 
 
