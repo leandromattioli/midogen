@@ -41,12 +41,12 @@ In batch mode operation, extracts documentation from files in a directory
     cout << desc << endl;
     cout << R"(
 Exit status:
- 0 if OK,
- 1 if invalid usage,
- 2 if file or directory not found.
+ 0  if OK,
+ 1  if invalid usage,
+ 2  if file or directory not found.
 
-Report bugs to: <https://github.com/leandromattioli/midogen/issues>
-Midogen home page: <https://github.com/leandromattioli/midogen>
+Report bugs to:  <https://github.com/leandromattioli/midogen/issues>
+Midogen home page:  <https://github.com/leandromattioli/midogen>
 )";
 }
 

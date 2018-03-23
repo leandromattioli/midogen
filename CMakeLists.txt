@@ -32,3 +32,6 @@ endif()
 add_executable(midogen "src/midogen.cpp")
 target_link_libraries(midogen MidogenLib 
     Boost::system Boost::program_options Boost::filesystem)
+
+# Install
+install (TARGETS midogen RUNTIME DESTINATION bin)
